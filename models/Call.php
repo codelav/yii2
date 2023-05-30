@@ -33,26 +33,20 @@ use yii\db\ActiveRecord;
  */
 class Call extends ActiveRecord
 {
-    const STATUS_NO_ANSWERED = 0;
-    const STATUS_ANSWERED = 1;
+    public const STATUS_NO_ANSWERED = 0;
+    public const STATUS_ANSWERED = 1;
 
-    const DIRECTION_INCOMING = 0;
-    const DIRECTION_OUTGOING = 1;
+    public const DIRECTION_INCOMING = 0;
+    public const DIRECTION_OUTGOING = 1;
 
     public $duration = 720;
 
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%call}}';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['ins_ts'], 'safe'],
@@ -64,10 +58,7 @@ class Call extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => Yii::t('app', 'ID'),
@@ -137,23 +128,12 @@ class Call extends ActiveRecord
         return $msg;
     }
 
-    /**
-     * @param bool $hasComment
-     * @return string
-     */
-    public function getTotalDisposition($hasComment = true)
+    public function getTotalDisposition(): string
     {
-        $t = [];
-        if ($hasComment && $this->comment) {
-            $t[] = $this->comment;
-        }
-        return implode(': ', $t);
+        return $this->comment ? ': ' . $this->comment : '';
     }
 
-    /**
-     * @return array
-     */
-    public static function getFullDirectionTexts()
+    public static function getFullDirectionTexts(): array
     {
         return [
             self::DIRECTION_INCOMING => Yii::t('app', 'Incoming Call'),
@@ -169,14 +149,16 @@ class Call extends ActiveRecord
         return self::getFullDirectionTexts()[$this->direction] ?? $this->direction;
     }
 
-    /**
-     * @return string
-     */
-    public function getDurationText()
+    public function getDurationText(): string
     {
         if (!is_null($this->duration)) {
             return $this->duration >= 3600 ? gmdate("H:i:s", $this->duration) : gmdate("i:s", $this->duration);
         }
         return '00:00';
+    }
+
+    public function isAnswered(): bool
+    {
+        return $this->status === self::STATUS_ANSWERED;
     }
 }

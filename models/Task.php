@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -35,26 +34,20 @@ use yii\db\ActiveRecord;
  */
 class Task extends ActiveRecord
 {
-    const STATUS_NEW = 0;
-    const STATUS_DONE = 1;
-    const STATUS_CANCEL = 3;
+    public const STATUS_NEW = 0;
+    public const STATUS_DONE = 1;
+    public const STATUS_CANCEL = 3;
 
-    const STATE_INBOX = 'inbox';
-    const STATE_DONE = 'done';
-    const STATE_FUTURE = 'future';
+    public const STATE_INBOX = 'inbox';
+    public const STATE_DONE = 'done';
+    public const STATE_FUTURE = 'future';
 
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%task}}';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['user_id', 'title'], 'required'],
@@ -66,10 +59,7 @@ class Task extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => Yii::t('app', 'ID'),
@@ -101,10 +91,7 @@ class Task extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
-    /**
-     * @return array
-     */
-    public static function getStatusTexts()
+    public static function getStatusTexts(): array
     {
         return [
             self::STATUS_NEW => Yii::t('app', 'New'),
@@ -127,13 +114,10 @@ class Task extends ActiveRecord
      */
     public function getStatusText()
     {
-        return self::getStatusTextByValue($this->status);
+        return $this->getStatusTextByValue($this->status);
     }
 
-    /**
-     * @return array
-     */
-    public static function getStateTexts()
+    public static function getStateTexts(): array
     {
         return [
             self::STATE_INBOX => Yii::t('app', 'Inbox'),
@@ -150,20 +134,13 @@ class Task extends ActiveRecord
         return self::getStateTexts()[$this->state] ?? $this->state;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function getIsOverdue()
+    public function getIsOverdue(): bool
     {
         return $this->status !== self::STATUS_DONE && strtotime($this->due_date) < time();
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsDone()
+    public function getIsDone(): bool
     {
-        return $this->status == self::STATUS_DONE;
+        return $this->status === self::STATUS_DONE;
     }
 }

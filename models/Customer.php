@@ -2,10 +2,8 @@
 
 namespace app\models;
 
-
 use Yii;
 use yii\db\ActiveRecord;
-
 
 /**
  * This is the model class for table "{{%customer}}".
@@ -15,48 +13,36 @@ use yii\db\ActiveRecord;
  */
 class Customer extends ActiveRecord
 {
-    const QUALITY_ACTIVE = 'active';
-    const QUALITY_REJECTED = 'rejected';
-    const QUALITY_COMMUNITY = 'community';
-    const QUALITY_UNASSIGNED = 'unassigned';
-    const QUALITY_TRICKLE = 'trickle';
+    public const QUALITY_ACTIVE = 'active';
+    public const QUALITY_REJECTED = 'rejected';
+    public const QUALITY_COMMUNITY = 'community';
+    public const QUALITY_UNASSIGNED = 'unassigned';
+    public const QUALITY_TRICKLE = 'trickle';
 
-    const TYPE_LEAD = 'lead';
-    const TYPE_DEAL = 'deal';
-    const TYPE_LOAN = 'loan';
+    public const TYPE_LEAD = 'lead';
+    public const TYPE_DEAL = 'deal';
+    public const TYPE_LOAN = 'loan';
 
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%customer}}';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name'], 'string', 'max' => 255],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'name' => Yii::t('app', 'Name'),
         ];
     }
 
-    /**
-     * @return array
-     */
-    public static function getQualityTexts()
+    public static function getQualityTexts(): array
     {
         return [
             self::QUALITY_ACTIVE => Yii::t('app', 'Active'),
@@ -67,19 +53,12 @@ class Customer extends ActiveRecord
         ];
     }
 
-    /**
-     * @param $quality
-     * @return mixed|null
-     */
-    public static function getQualityTextByQuality($quality)
+    public static function getQualityTextByQuality(?string $quality): ?string
     {
         return self::getQualityTexts()[$quality] ?? $quality;
     }
 
-    /**
-     * @return array
-     */
-    public static function getTypeTexts()
+    public static function getTypeTexts(): array
     {
         return [
             self::TYPE_LEAD => Yii::t('app', 'Lead'),
@@ -88,11 +67,7 @@ class Customer extends ActiveRecord
         ];
     }
 
-    /**
-     * @param $type
-     * @return mixed
-     */
-    public static function getTypeTextByType($type)
+    public static function getTypeTextByType(?string $type): ?string
     {
         return self::getTypeTexts()[$type] ?? $type;
     }

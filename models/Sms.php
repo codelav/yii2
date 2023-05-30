@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -29,27 +28,26 @@ use yii\db\ActiveRecord;
  */
 class Sms extends ActiveRecord
 {
-    const DIRECTION_INCOMING = 0;
-    const DIRECTION_OUTGOING = 1;
+    public const DIRECTION_INCOMING = 0;
+    public const DIRECTION_OUTGOING = 1;
 
     // incoming
-    const STATUS_NEW = 0;
-    const STATUS_READ = 1;
-    const STATUS_ANSWERED = 2;
+    public const STATUS_NEW = 0;
+    public const STATUS_READ = 1;
+    public const STATUS_ANSWERED = 2;
 
     // outgoing
-    const STATUS_DRAFT = 10;
-    const STATUS_WAIT = 11;
-    const STATUS_SENT = 12;
-    const STATUS_DELIVERED = 13;
-    const STATUS_FAILED = 14;
-    const STATUS_SUCCESS = 13;
-
+    public const STATUS_DRAFT = 10;
+    public const STATUS_WAIT = 11;
+    public const STATUS_SENT = 12;
+    public const STATUS_DELIVERED = 13;
+    public const STATUS_FAILED = 14;
+    public const STATUS_SUCCESS = 13;
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%sms}}';
     }
@@ -57,7 +55,7 @@ class Sms extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['phone_to', 'direction'], 'required'],
@@ -73,7 +71,7 @@ class Sms extends ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => Yii::t('app', 'ID'),
@@ -108,10 +106,7 @@ class Sms extends ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
-    /**
-     * @return array
-     */
-    public static function getStatusTexts()
+    public static function getStatusTexts(): array
     {
         return [
             self::STATUS_NEW => Yii::t('app', 'New'),
@@ -142,10 +137,7 @@ class Sms extends ActiveRecord
         return self::getStatusTextByValue($this->status);
     }
 
-    /**
-     * @return array
-     */
-    public static function getDirectionTexts()
+    public static function getDirectionTexts(): array
     {
         return [
             self::DIRECTION_INCOMING => Yii::t('app', 'Incoming'),
@@ -168,5 +160,10 @@ class Sms extends ActiveRecord
     public function getDirectionText()
     {
         return self::getDirectionTextByValue($this->direction);
+    }
+
+    public function isIncoming(): bool
+    {
+        return $this->direction === self::DIRECTION_INCOMING;
     }
 }
